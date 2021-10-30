@@ -1,0 +1,185 @@
+<html>
+<head>
+  <style type="text/css">
+    body {
+      margin: 0;
+      width: 100%;
+      font-family: Arial;
+    }
+    nav {
+      padding: 2px;
+      border-top: 2px solid #87cefa;
+      border-bottom: 2px solid #87cefa;
+      overflow: hidden;
+      background-color: rgba(240, 255, 255, 0.9);
+      position: fixed;
+      z-index: 999;
+      width: 100%;
+      top: 0px;
+      height: 100px;
+    }
+    .container {
+      padding-top: 100px;
+      width: 80%;
+      margin: auto;
+      background-color: white;
+    }
+    .col {
+      float: left;
+    }
+
+    .col-one {
+      width: 100%;
+      float: left;
+    }
+
+    .col-duo {
+      width: 50%;
+      float: left;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .hasil {
+      float: left;
+      border: solid #333 5px; 
+      margin-right: 20px; 
+      margin-bottom: 20px;
+      width: auto;
+      height: auto;
+    }
+
+    table{
+      width: 500px; /* Ganti menjadi 100% untuk tampilan responsif */
+      border-collapse: collapse;
+      margin: 30px 0px 30px;
+      background-color: #fff;
+      font-size: 14px;
+    }
+    table tr {
+      height: 40px;
+    }
+    table th {
+      background: #333;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    table td, th {
+      padding: 6px 6px 6px 10px;
+      border: 1px solid #ccc;
+    }
+
+    /* CSS3 untuk pewarnaan baris selang-seling */
+    table tr:nth-of-type(odd) {
+      background: #eee;
+    }
+
+    /* Penomoran otomatis pada baris */
+    .css-serial {
+      counter-reset: serial-number;  /* Atur penomoran ke 0 */
+    }
+    .css-serial td:first-child:before {
+      counter-increment: serial-number;  /* Kenaikan penomoran */
+      content: counter(serial-number);  /* Tampilan counter */
+    }
+    .btn {
+      border-radius: 2px;
+      background-color: #87cefa;
+      border: none;
+      color: black;
+      padding: 10px 28px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .btn:hover{
+      opacity:0.9;
+    }
+  </style>
+  <title>Ikan Koi</title>
+</head>
+<body>
+  <nav>
+    <div class="row" style="padding-left: 10px; padding-right: 10px;">
+      <div class="col" style="width: 10%; float: left;">
+        <img src="{{url_for('static',filename = 'logo/logo.png')}}" width="90px" height="90px" style="padding: 5px;">
+      </div>
+      <div class="col" style="width: 40%; float: left; padding: 8px;">
+        <b style="font-size: 25px;">Koi Image Search Engine</b>
+        <form method="POST" enctype="multipart/form-data">
+          <input class="btn" type="file" name="query_img">
+          <input class="btn" type="submit">
+        </form>
+      </div>
+      <div class="col" style="width: 20%;" align="center">
+        <image src="{{url_for('static',filename = 'logo/UNP.png')}}" width="90px" height="90px" style="padding: 5px;">
+      </div>
+      <div class="col" style="width: 30%;"></div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="col-one" align="center">
+      <div class="row">
+        <h2>Query:</h2>
+        {% if query_path %}
+        <img src="{{ query_path }}" width="300px" height="auto">
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-one">
+      <div class="row">
+        <h2>Keterangan</h2>
+        {% if ket %}
+        <p>Gambar Query yang dipilih <b>{{ket}}</b> Ikan Koi</p>
+        {% endif %}
+      </div>
+      <div class="row">
+        <h2>Gambar Mirip:</h2>
+        <div>
+          {% for score in scores %} 
+          <div class="hasil">
+            <img src="{{ score[1] }}" width="180px;">
+            <div>
+              <i>{{ score[0] }}</i>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="row">
+        <h2>Tabel Data Kemiripan</h2>
+        <table class="css-serial">
+          <thead>
+            <tr>
+              <th>Nomor</th>
+              <th>Nilai Kemiripan</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for score in scores %}
+            <tr>
+              <td align="center"></td>
+              <td>{{score[0]}}</td>
+              <td><i>{{score[1]}}</i></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
